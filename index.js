@@ -1,10 +1,10 @@
 var isString = require('is-string');
 
-function joinStrings(strings, options) {
+function joinStrings(options) {
+  var strings = parseArguments(Array.prototype.slice.call(arguments, 1));
   var delimiter = '';
   var prefix = '';
   var suffix = '';
-  strings = [].concat(strings);
 
   if(isString(options)) {
     delimiter = options;
@@ -15,12 +15,17 @@ function joinStrings(strings, options) {
     suffix = options.suffix || '';
   }
 
-  var joined = strings.reduce(concatWithDelimiter.bind(null, delimiter));
+  var joined = strings.join(delimiter);
   return prefix.concat(joined, suffix);
 }
 
-function concatWithDelimiter(delimiter, accumulator, value) {
-  return ''.concat(accumulator, delimiter, value);
+function parseArguments(args) {
+  if(Array.isArray(args[0])) {
+    return args[0];
+  }
+  else {
+    return args;
+  }
 }
 
 module.exports = joinStrings;
